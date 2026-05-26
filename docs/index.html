@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Ruteapp – Sentralbru Trondheim</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="panel">
+    <h1>Rute med og uten sentralbru</h1>
+
+    <div class="section">
+      <label>Modus</label>
+      <div class="btn-group">
+        <button id="btn-sykkel" class="btn active" onclick="setModus('sykkel')">Sykkel</button>
+        <button id="btn-gange"  class="btn"        onclick="setModus('gange')">Gange</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Fart: <span id="fart-label">15 km/t</span></label>
+      <input type="range" id="fart-slider" min="3" max="30" step="1" value="15">
+    </div>
+
+    <div class="section">
+      <label>Brumodell</label>
+      <div class="btn-group">
+        <button id="btn-A" class="btn active" onclick="setBruModell('A')">A – flat</button>
+        <button id="btn-B" class="btn"        onclick="setBruModell('B')">B – rampe</button>
+      </div>
+      <div id="modell-forklaring" class="modell-note"></div>
+    </div>
+
+    <div id="instruksjon" class="section info">
+      Klikk et punkt <strong>A</strong> i kartet, deretter punkt <strong>B</strong>.
+    </div>
+
+    <div id="resultater" class="section hidden">
+      <div class="resultat-rad">
+        <span class="dot orange"></span>
+        <span class="label">Uten bru</span>
+        <span id="tid-basis" class="tid">–</span>
+      </div>
+      <div class="resultat-rad">
+        <span class="dot blue"></span>
+        <span class="label">Med bru</span>
+        <span id="tid-bru" class="tid">–</span>
+      </div>
+      <div class="divider"></div>
+      <div class="resultat-rad">
+        <span class="dot invisible"></span>
+        <span class="label">Besparelse</span>
+        <span id="besparelse" class="tid savings">–</span>
+      </div>
+      <div id="bru-status" class="bru-status"></div>
+      <div class="rutelengde">
+        Avstand: <span id="len-basis">–</span> m uten bru
+        · <span id="len-bru">–</span> m med bru
+      </div>
+    </div>
+
+    <div class="section points-display">
+      <div id="punkt-A" class="punkt punkt-a">A: klikk i kartet</div>
+      <div id="punkt-B" class="punkt punkt-b">B: klikk i kartet</div>
+      <button class="btn-small" onclick="nullstill()">Nullstill</button>
+    </div>
+
+    <div class="legend">
+      <div class="legend-row"><span class="leg-line orange-line"></span> Uten bru</div>
+      <div class="legend-row"><span class="leg-line blue-line"></span> Med bru</div>
+    </div>
+
+    <div class="metodenote">
+      Uniform fart. Sykkelnett brukt også for gange. Hypotetisk bru er syntetisk kant.
+      Se METODE.md i bruanalyse-mappen for metodebeskrivelse.
+    </div>
+  </div>
+
+  <div id="map">
+    <div id="loading">Laster graf…</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

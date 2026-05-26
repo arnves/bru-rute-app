@@ -1,0 +1,228 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+  background: #111;
+}
+
+/* ── Panel ── */
+#panel {
+  width: 295px;
+  min-width: 280px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  overflow-y: auto;
+  padding: 18px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 1000;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.5);
+}
+
+h1 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #90caf9;
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+
+.section { margin-bottom: 16px; }
+
+label {
+  display: block;
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 7px;
+}
+
+/* ── Buttons ── */
+.btn-group { display: flex; gap: 6px; }
+
+.btn {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid #383860;
+  background: #252540;
+  color: #bbb;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn.active {
+  background: #1565c0;
+  border-color: #1976d2;
+  color: #fff;
+}
+.btn:hover:not(.active) { background: #2e2e52; border-color: #4a4a70; }
+
+.btn-small {
+  margin-top: 10px;
+  padding: 5px 14px;
+  background: #2a1a1a;
+  border: 1px solid #553333;
+  color: #ff8a80;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background 0.15s;
+}
+.btn-small:hover { background: #3a2020; }
+
+/* ── Slider ── */
+input[type=range] {
+  width: 100%;
+  margin-top: 2px;
+  accent-color: #1976d2;
+  cursor: pointer;
+}
+
+/* ── Info / instruction box ── */
+.info {
+  background: #22223a;
+  border-left: 3px solid #1976d2;
+  border-radius: 0 5px 5px 0;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  color: #aac4e8;
+  line-height: 1.5;
+}
+.info strong { color: #90caf9; }
+
+.hidden { display: none !important; }
+
+/* ── Results ── */
+.resultat-rad {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 0;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot.orange   { background: #ff6600; }
+.dot.blue     { background: #1976d2; }
+.dot.invisible { visibility: hidden; }
+
+.label { flex: 1; font-size: 0.82rem; color: #aaa; }
+
+.tid {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #eee;
+  text-align: right;
+  min-width: 80px;
+}
+.tid.savings { color: #66bb6a; }
+
+.divider {
+  border-top: 1px solid #2a2a44;
+  margin: 4px 0;
+}
+
+.bru-status {
+  font-size: 0.72rem;
+  color: #ffd54f;
+  min-height: 1.3em;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.rutelengde {
+  font-size: 0.7rem;
+  color: #555;
+  margin-top: 6px;
+}
+
+/* ── Points display ── */
+.points-display {
+  border-top: 1px solid #252540;
+  padding-top: 14px;
+}
+
+.punkt {
+  font-size: 0.72rem;
+  color: #666;
+  padding: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.punkt-a { color: #6dbf6d; }
+.punkt-b { color: #e57373; }
+
+/* ── Model note ── */
+.modell-note {
+  font-size: 0.68rem;
+  color: #555;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+/* ── Legend ── */
+.legend {
+  border-top: 1px solid #252540;
+  padding-top: 12px;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.leg-line {
+  display: inline-block;
+  width: 28px;
+  height: 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.orange-line { background: #ff6600; }
+.blue-line   { background: #1976d2; }
+
+/* ── Method note ── */
+.metodenote {
+  margin-top: auto;
+  padding-top: 14px;
+  font-size: 0.65rem;
+  color: #3a3a55;
+  line-height: 1.5;
+}
+
+/* ── Map ── */
+#map {
+  flex: 1;
+  position: relative;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.7);
+  color: #90caf9;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  z-index: 9999;
+  pointer-events: none;
+}
