@@ -198,6 +198,154 @@ input[type=range] {
 .orange-line { background: #ff6600; }
 .blue-line   { background: #1976d2; }
 
+/* ── Analyse-knapp ── */
+.btn-analyse {
+  width: 100%;
+  padding: 9px 14px;
+  background: #0d2a4a;
+  border: 1px solid #1565c0;
+  color: #90caf9;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 14px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-analyse:hover {
+  background: #163a60;
+  border-color: #1976d2;
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-boks {
+  background: #1a1a2e;
+  border: 1px solid #2a2a50;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 1080px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid #252545;
+  flex-shrink: 0;
+}
+
+.modal-tittel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #90caf9;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.modal-lukk {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+  transition: color 0.15s;
+}
+.modal-lukk:hover { color: #eee; }
+
+.modal-innhold {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.fig-liste {
+  width: 200px;
+  min-width: 180px;
+  border-right: 1px solid #252545;
+  overflow-y: auto;
+  padding: 10px 0;
+  flex-shrink: 0;
+}
+
+.fig-gruppe-tittel {
+  font-size: 0.65rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 14px 4px;
+}
+
+.fig-liste-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 7px 14px;
+  font-size: 0.77rem;
+  color: #999;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  line-height: 1.4;
+}
+.fig-liste-item:hover { background: #222240; color: #ccc; }
+.fig-liste-item.aktiv { background: #1a2d50; color: #90caf9; }
+
+/* Figure area */
+.fig-visning {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 16px 20px;
+  gap: 14px;
+}
+
+#fig-bilde {
+  width: 100%;
+  flex: 1;
+  object-fit: contain;
+  object-position: top;
+  min-height: 0;
+  border-radius: 4px;
+  background: #111;
+}
+
+.fig-tittel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c5d8f5;
+  flex-shrink: 0;
+}
+
+.fig-beskrivelse {
+  font-size: 0.77rem;
+  color: #8888aa;
+  line-height: 1.65;
+  flex-shrink: 0;
+}
+
 /* ── Method note ── */
 .metodenote {
   margin-top: auto;

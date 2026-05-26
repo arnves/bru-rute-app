@@ -29,6 +29,9 @@ logger = logging.getLogger(__name__)
 DEFAULT_BRUANALYSE = Path(__file__).parent.parent / "bruanalyse"
 
 
+MAKS_BREDDE_PX = 1400  # ned-skalering for web-figurer
+
+
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument(
@@ -38,10 +41,44 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--ut",
-        default=str(Path(__file__).parent / "web" / "data" / "graf.json"),
-        help="Utfil (standard: web/data/graf.json)",
+        default=str(Path(__file__).parent / "docs" / "data" / "graf.json"),
+        help="Utfil (standard: docs/data/graf.json)",
+    )
+    p.add_argument(
+        "--med-figurer", action="store_true",
+        help="Kopier og komprimer analysefigurer til docs/figurer/",
     )
     return p.parse_args()
+
+
+def eksporter_figurer(bruanalyse_rot: Path, docs_rot: Path) -> None:
+    """Ned-skaler og kopier PNG-figurer fra bruanalyse til docs/figurer/."""
+    from PIL import Image
+
+    kilde = bruanalyse_rot / "output" / "figurer"
+    maal  = docs_rot / "figurer"
+    maal.mkdir(parents=True, exist_ok=True)
+
+    figurer = sorted(kilde.glob("*.png"))
+    if not figurer:
+        logger.warning("Ingen PNG-figurer funnet i %s", kilde)
+        return
+
+    for src in figurer:
+        dst = maal / src.name
+        img = Image.open(src)
+        w, h = img.size
+        if w > MAKS_BREDDE_PX:
+            ny_h = int(h * MAKS_BREDDE_PX / w)
+            img = img.resize((MAKS_BREDDE_PX, ny_h), Image.LANCZOS)
+        img.save(dst, format="PNG", optimize=True)
+        logger.info(
+            "Figur: %s (%dx%d → %dx%d, %.0f KB)",
+            src.name, w, h, img.size[0], img.size[1],
+            dst.stat().st_size / 1024,
+        )
+
+    logger.info("Eksporterte %d figurer til %s", len(figurer), maal)
 
 
 def beregn_brulengder(hyp: dict) -> tuple[float, float]:
@@ -208,6 +245,10 @@ def main() -> None:
     size_kb = ut_fil.stat().st_size / 1024
     logger.info("Skrevet til %s (%.0f KB)", ut_fil, size_kb)
     logger.info("Ferdig. Verifiser: node_nord=%d, node_syd=%d", node_nord, node_syd)
+
+    if args.med_figurer:
+        docs_rot = ut_fil.parent.parent
+        eksporter_figurer(bruanalyse_rot, docs_rot)
 
 
 if __name__ == "__main__":

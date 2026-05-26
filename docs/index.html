@@ -72,6 +72,8 @@
       <div class="legend-row"><span class="leg-line blue-line"></span> Med bru</div>
     </div>
 
+    <button class="btn-analyse" onclick="aapneModal()">Reisetidsanalyser →</button>
+
     <div class="metodenote">
       <div class="metodenote-tittel">Hva gjør appen?</div>
       <p>Sammenligner sykkel- og gangesti med og uten en hypotetisk jernbanebru
@@ -89,6 +91,26 @@
 
   <div id="map">
     <div id="loading">Laster graf…</div>
+  </div>
+
+  <!-- Figur-modal -->
+  <div id="figurer-modal" class="modal-overlay hidden" onclick="modalBakgrunnKlikk(event)">
+    <div class="modal-boks">
+      <div class="modal-header">
+        <span class="modal-tittel">Reisetidsanalyser</span>
+        <button class="modal-lukk" onclick="lukkModal()">×</button>
+      </div>
+      <div class="modal-innhold">
+        <nav class="fig-liste" id="fig-liste"></nav>
+        <div class="fig-visning">
+          <img id="fig-bilde" src="" alt="">
+          <div id="fig-info">
+            <div id="fig-tittel" class="fig-tittel"></div>
+            <div id="fig-beskrivelse" class="fig-beskrivelse"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

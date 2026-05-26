@@ -1,5 +1,133 @@
 'use strict';
 
+// ── Figurdata ─────────────────────────────────────────────────────────────────
+const FIGURER = [
+  {
+    gruppe: 'Veistrekksanalyse',
+    fil: 'figurer/kart_veier_besparelse.png',
+    kort: 'Modell A – flat (270 m)',
+    tittel: 'Gjennomsnittlig spart reisetid per veistrekk – Modell A (flat, 270 m)',
+    beskrivelse: 'Hvert veistrekk er farget etter gjennomsnittlig spart sykkelreisetid for kryssreiser over jernbanen fra det aktuelle punktet, med sentralbrua til stede. Fargeskalering fra grå (ingen besparelse) til grønn (størst besparelse i sekunder). Kun rutbare veier er farget — ingen interpolasjon over ubebygde arealer.',
+  },
+  {
+    gruppe: 'Veistrekksanalyse',
+    fil: 'figurer/kart_veier_besparelse_stigning.png',
+    kort: 'Modell B – rampe (440 m)',
+    tittel: 'Gjennomsnittlig spart reisetid per veistrekk – Modell B (forskriftsmessig rampe, 440 m)',
+    beskrivelse: 'Samme analyse som Modell A, men beregnet med en brulengde på 440 m etter kravet om maks 5 % stigning (SVV V122 Sykkelhåndboka). Den lengre traseen reflekterer nødvendige ramper for å håndtere høydeforskjellen over jernbanen.',
+  },
+  {
+    gruppe: 'Sirkus Shopping',
+    fil: 'figurer/kart_mal_sirkus_shopping.png',
+    kort: 'Modell A – flat (270 m)',
+    tittel: 'Spart reisetid til Sirkus Shopping – Modell A (flat, 270 m)',
+    beskrivelse: 'Hvert punkt på nordsiden av jernbanen er farget etter spart sykkelreisetid til Sirkus Shopping, beregnet med reversert Dijkstra fra målet. Fargen viser hvor mange sekunder kortere turen til Sirkus blir fra det aktuelle startpunktet dersom sentralbrua er på plass.',
+  },
+  {
+    gruppe: 'Sirkus Shopping',
+    fil: 'figurer/kart_mal_sirkus_shopping_stigning.png',
+    kort: 'Modell B – rampe (440 m)',
+    tittel: 'Spart reisetid til Sirkus Shopping – Modell B (forskriftsmessig rampe, 440 m)',
+    beskrivelse: 'Samme destinasjonsforankrede analyse som over, med brulengde 440 m etter forskriftsmessig stigning.',
+  },
+  {
+    gruppe: 'City Lade',
+    fil: 'figurer/kart_mal_city_lade.png',
+    kort: 'Modell A – flat (270 m)',
+    tittel: 'Spart reisetid til City Lade – Modell A (flat, 270 m)',
+    beskrivelse: 'Hvert punkt på sydsiden av jernbanen er farget etter spart sykkelreisetid til City Lade. Fargen viser besparelsen i sekunder fra det aktuelle startpunktet, beregnet med reversert Dijkstra fra målet.',
+  },
+  {
+    gruppe: 'City Lade',
+    fil: 'figurer/kart_mal_city_lade_stigning.png',
+    kort: 'Modell B – rampe (440 m)',
+    tittel: 'Spart reisetid til City Lade – Modell B (forskriftsmessig rampe, 440 m)',
+    beskrivelse: 'Samme destinasjonsforankrede analyse som over, med brulengde 440 m etter forskriftsmessig stigning.',
+  },
+  {
+    gruppe: 'Lade idrettsanlegg',
+    fil: 'figurer/kart_mal_lade_idrettsanlegg.png',
+    kort: 'Modell A – flat (270 m)',
+    tittel: 'Spart reisetid til Lade idrettsanlegg – Modell A (flat, 270 m)',
+    beskrivelse: 'Hvert punkt på sydsiden av jernbanen er farget etter spart sykkelreisetid til Lade idrettsanlegg, med sentralbrua til stede.',
+  },
+  {
+    gruppe: 'Lade idrettsanlegg',
+    fil: 'figurer/kart_mal_lade_idrettsanlegg_stigning.png',
+    kort: 'Modell B – rampe (440 m)',
+    tittel: 'Spart reisetid til Lade idrettsanlegg – Modell B (forskriftsmessig rampe, 440 m)',
+    beskrivelse: 'Samme destinasjonsforankrede analyse som over, med brulengde 440 m etter forskriftsmessig stigning.',
+  },
+  {
+    gruppe: 'Lade Arena',
+    fil: 'figurer/kart_mal_lade_arena.png',
+    kort: 'Modell A – flat (270 m)',
+    tittel: 'Spart reisetid til Lade Arena – Modell A (flat, 270 m)',
+    beskrivelse: 'Hvert punkt på sydsiden av jernbanen er farget etter spart sykkelreisetid til Lade Arena, med sentralbrua til stede. Modell B genereres ikke for dette målet da besparelsen er tilnærmet null ved lengre brulengde.',
+  },
+];
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+let aktivFigurIndeks = 0;
+
+function aapneModal() {
+  const modal = document.getElementById('figurer-modal');
+  modal.classList.remove('hidden');
+  document.addEventListener('keydown', modalKeyHandler);
+  if (document.getElementById('fig-liste').childElementCount === 0) byggFigurListe();
+  visFigur(aktivFigurIndeks);
+}
+
+function lukkModal() {
+  document.getElementById('figurer-modal').classList.add('hidden');
+  document.removeEventListener('keydown', modalKeyHandler);
+}
+
+function modalBakgrunnKlikk(e) {
+  if (e.target === document.getElementById('figurer-modal')) lukkModal();
+}
+
+function modalKeyHandler(e) {
+  if (e.key === 'Escape') lukkModal();
+  if (e.key === 'ArrowRight') visFigur(Math.min(aktivFigurIndeks + 1, FIGURER.length - 1));
+  if (e.key === 'ArrowLeft')  visFigur(Math.max(aktivFigurIndeks - 1, 0));
+}
+
+function byggFigurListe() {
+  const liste = document.getElementById('fig-liste');
+  let sisteGruppe = null;
+
+  FIGURER.forEach((fig, i) => {
+    if (fig.gruppe !== sisteGruppe) {
+      const gruppeEl = document.createElement('div');
+      gruppeEl.className = 'fig-gruppe-tittel';
+      gruppeEl.textContent = fig.gruppe;
+      liste.appendChild(gruppeEl);
+      sisteGruppe = fig.gruppe;
+    }
+    const el = document.createElement('button');
+    el.className = 'fig-liste-item';
+    el.dataset.indeks = i;
+    el.textContent = fig.kort;
+    el.addEventListener('click', () => visFigur(i));
+    liste.appendChild(el);
+  });
+}
+
+function visFigur(indeks) {
+  aktivFigurIndeks = indeks;
+  const fig = FIGURER[indeks];
+
+  document.getElementById('fig-bilde').src = fig.fil;
+  document.getElementById('fig-bilde').alt = fig.tittel;
+  document.getElementById('fig-tittel').textContent = fig.tittel;
+  document.getElementById('fig-beskrivelse').textContent = fig.beskrivelse;
+
+  document.querySelectorAll('.fig-liste-item').forEach(el => {
+    el.classList.toggle('aktiv', +el.dataset.indeks === indeks);
+  });
+}
+
 // ── State ─────────────────────────────────────────────────────────────────────
 let graf = null;
 let nodeById = {};   // { nodeId(str) : { lat, lon } }
